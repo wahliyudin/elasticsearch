@@ -4,6 +4,7 @@ use App\Data\ProductData;
 use App\Elastics\ElasticSearchBuilder;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +41,7 @@ Route::get('/', function () {
     //     'description' => fake()->sentence(),
     //     'price' => 150_000,
     // ]);
-    return ProductData::collection(collect((new ElasticSearchBuilder)->setModel(new Product())->search('411501'))->pluck('_source'));
+    // return ProductData::collection(collect((new ElasticSearchBuilder)->setModel(new Product())->search('411501'))->pluck('_source'));
     return view('welcome');
 });
 

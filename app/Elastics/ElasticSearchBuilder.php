@@ -122,6 +122,32 @@ class ElasticSearchBuilder
         return $response['hits']['hits'];
     }
 
+    public function searchWithPagination($page, $perPage, $keyword = null)
+    {
+        $body = [
+            'from' => ($page - 1) * $perPage,
+            'size' => $perPage,
+        ];
+
+        if ($keyword) {
+            $body = array_merge($body, [
+                'query' => [
+                    'query_string' => [
+                        'query' => $keyword,
+                    ],
+                ],
+            ]);
+        }
+        $params = [
+            'index' => $this->getIndex(),
+            'body' => $body
+        ];
+
+        $response = $this->clientBuilder->search($params);
+
+        return $response;
+    }
+
     // public function createIndex()
     // {
     //     $client = $this->getElasticsearchClient();
