@@ -20,21 +20,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    // for ($i = 0; $i < 1000; $i++) {
-    //     Product::query()->create([
-    //         'name' => fake()->name(),
-    //         'description' => fake()->sentence(),
-    //         'price' => fake()->numberBetween(100_000, 1_000_000),
-    //     ]);
-    // }
+    for ($i = 0; $i < 1000; $i++) {
+        Product::query()->create([
+            'name' => fake()->name(),
+            'description' => fake()->sentence(),
+            'price' => fake()->numberBetween(100_000, 1_000_000),
+        ]);
+    }
     // $product = Product::query()->create([
-    //     'name' => fake()->name(),
+    //     'name' => 'wahliyudin',
     //     'description' => fake()->sentence(),
     //     'price' => 150_000,
     // ]);
     // (new ElasticSearchBuilder)->setModel(new Product())->cleared();
     // $product = Product::query()->delete();
-    // $product = Product::query()->first();
+    // $product = Product::query()->where('id', 36)->first();
     // $product->delete();
     // $product->update([
     //     'name' => 'update',
@@ -49,3 +49,5 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/home/datatable', [App\Http\Controllers\HomeController::class, 'datatable'])->name('home.datatable');
+Route::post('/home/store', [App\Http\Controllers\HomeController::class, 'store'])->name('home.store');
+Route::delete('/home/{product}/destroy', [App\Http\Controllers\HomeController::class, 'destroy'])->name('home.destroy');

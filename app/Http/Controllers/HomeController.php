@@ -43,8 +43,33 @@ class HomeController extends Controller
                 return $data['_source']['description'];
             })
             ->editColumn('price', function ($data) {
-                return $data['_source']['price'];
+                return number_format($data['_source']['price'], 0, ',', '.');
             })
+            ->editColumn('action', function ($data) {
+                return '<button type="button" class="btn btn-danger btn-delete"
+                data-product="' . $data['_source']['id'] . '">Delete</button>';
+            })
+            ->rawColumns(['action'])
             ->make();
+    }
+
+    public function store(Request $request)
+    {
+        Product::query()->create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+        ]);
+        return response()->json([
+            'message' => "Success"
+        ]);
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+        return response()->json([
+            'message' => "Success"
+        ]);
     }
 }
