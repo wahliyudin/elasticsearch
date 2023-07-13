@@ -2,6 +2,7 @@
 
 use App\Data\ProductData;
 use App\Elastics\ElasticSearchBuilder;
+use App\Models\Employee;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +22,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
 
     for ($i = 0; $i < 1000; $i++) {
-        Product::query()->create([
+        Employee::query()->create([
             'name' => fake()->name(),
-            'description' => fake()->sentence(),
-            'price' => fake()->numberBetween(100_000, 1_000_000),
         ]);
     }
+    // for ($i = 0; $i < 1000; $i++) {
+    //     Product::query()->create([
+    //         'name' => fake()->name(),
+    //         'description' => fake()->sentence(),
+    //         'price' => fake()->numberBetween(100_000, 1_000_000),
+    //     ]);
+    // }
     // $product = Product::query()->create([
     //     'name' => 'wahliyudin',
     //     'description' => fake()->sentence(),
