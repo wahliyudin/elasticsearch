@@ -43,3 +43,7 @@ Route::get('/', function () {
     return ProductData::collection(collect((new ElasticSearchBuilder)->setModel(new Product())->search('411501'))->pluck('_source'));
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
