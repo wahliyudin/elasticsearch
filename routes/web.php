@@ -1,6 +1,9 @@
 <?php
 
+use App\Data\ProductData;
+use App\Elastics\ElasticSearchBuilder;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,23 +19,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
+    // for ($i = 0; $i < 1000; $i++) {
+    //     Product::query()->create([
+    //         'name' => fake()->name(),
+    //         'description' => fake()->sentence(),
+    //         'price' => fake()->numberBetween(100_000, 1_000_000),
+    //     ]);
+    // }
     // $product = Product::query()->create([
     //     'name' => fake()->name(),
     //     'description' => fake()->sentence(),
     //     'price' => 150_000,
     // ]);
-
-
+    // (new ElasticSearchBuilder)->setModel(new Product())->cleared();
     // $product = Product::query()->delete();
-
+    // $product = Product::query()->first();
     // $product->delete();
     // $product->update([
     //     'name' => 'update',
     //     'description' => fake()->sentence(),
     //     'price' => 150_000,
     // ]);
-
-    // (new Product())->cleared();
-
+    return ProductData::collection(collect((new ElasticSearchBuilder)->setModel(new Product())->search('411501'))->pluck('_source'));
     return view('welcome');
 });

@@ -2,16 +2,22 @@
 
 namespace App\Observers;
 
+use App\Elastics\ElasticSearchBuilder;
 use App\Models\Product;
 
 class ProductObserver
 {
+    public function __construct(
+        protected ElasticSearchBuilder $elasticSearchBuilder
+    ) {
+    }
+
     /**
      * Handle the Product "created" event.
      */
     public function created(Product $product): void
     {
-        $product->addToElasticsearch();
+        $this->elasticSearchBuilder->setModel($product)->created();
     }
 
     /**
@@ -19,7 +25,7 @@ class ProductObserver
      */
     public function updated(Product $product): void
     {
-        $product->updateIndex();
+        $this->elasticSearchBuilder->setModel($product)->updated();
     }
 
     /**
@@ -27,7 +33,7 @@ class ProductObserver
      */
     public function deleted(Product $product): void
     {
-        $product->deleteIndex();
+        $this->elasticSearchBuilder->setModel($product)->deleted();
     }
 
     /**
