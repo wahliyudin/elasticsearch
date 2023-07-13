@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use Yajra\DataTables\Facades\DataTables;
 
 class HomeController extends Controller
 {
@@ -20,27 +21,30 @@ class HomeController extends Controller
     public function __construct(
         protected ElasticSearchBuilder $elasticSearchBuilder
     ) {
-        // $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index(Request $request)
+    public function index()
     {
-        $perPage = 10;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $response = $this->elasticSearchBuilder->setModel(new Product())->searchWithPagination($currentPage, $perPage, $request->get('search'));
-        $totalHits = $response['hits']['total']['value'];
+        return view('results');
+    }
+
+    public function datatable(Request $request)
+    {
+        $response = $this->elasticSearchBuilder->setModel(new Product())->searchWithPagination($request->get('search'));
         $collection = collect($response['hits']['hits']);
-        Paginator::useBootstrapFive();
-        $paginatedResults = new LengthAwarePaginator($collection, $totalHits, $perPage, $currentPage, [
-            'path' => LengthAwarePaginator::resolveCurrentPath(),
-        ]);
-        return view('results', [
-            'products' => $paginatedResults,
-        ]);
+        return DataTables::collection($collection)
+            ->editColumn('id', function ($data) {
+                return $data['_source']['id'];
+            })
+            ->editColumn('name', function ($data) {
+                return $data['_source']['name'];
+            })
+            ->editColumn('description', function ($data) {
+                return $data['_source']['description'];
+            })
+            ->editColumn('price', function ($data) {
+                return $data['_source']['price'];
+            })
+            ->make();
     }
 }

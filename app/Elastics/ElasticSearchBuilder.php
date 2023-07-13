@@ -122,11 +122,10 @@ class ElasticSearchBuilder
         return $response['hits']['hits'];
     }
 
-    public function searchWithPagination($page, $perPage, $keyword = null)
+    public function searchWithPagination($keyword = null)
     {
         $body = [
-            'from' => ($page - 1) * $perPage,
-            'size' => $perPage,
+            'size' => 100,
         ];
 
         if ($keyword) {
